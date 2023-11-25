@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        form {
+            display: inline-block;
+            text-align: left;
+        }
+
+        input, select, button {
+            margin-bottom: 10px;
+            padding: 5px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Калькулятор</h1>
+    <form id="calculatorForm">
+        <label for="first">Первый параметр:</label>
+        <input type="text" id="first" name="first" required>
+        <select id="firstBase" name="firstBase">
+            <option value="10">Десятичная</option>
+            <option value="2">Двоичная</option>
+            <option value="8">Восьмеричная</option>
+            <option value="16">Шестнадцатеричная</option>
+        </select><br>
+
+        <label for="second">Второй параметр:</label>
+        <input type="text" id="second" name="second" required>
+        <select id="secondBase" name="secondBase">
+            <option value="10">Десятичная</option>
+            <option value="2">Двоичная</option>
+            <option value="8">Восьмеричная</option>
+            <option value="16">Шестнадцатеричная</option>
+        </select><br>
+
+        <label for="operation">Операция:</label>
+        <select id="operation" name="operation" required>
+            <option value="+">Сложение</option>
+            <option value="-">Вычитание</option>
+            <option value="*">Умножение</option>
+            <option value="/">Деление</option>
+            <option value="%">Модуль</option>
+            <option value="^">Степень</option>
+        </select><br>
+
+        <button type="button" onclick="compute()">Вычислить</button>
+    </form>
+
+    <div id="result"></div>
+    <div id="error"></div>
+
+    <script>
+        function compute() {
+            const first = document.getElementById('first').value;
+            const firstBase = document.getElementById('firstBase').value;
+
+            const second = document.getElementById('second').value;
+            const secondBase = document.getElementById('secondBase').value;
+            const operation = document.getElementById('operation').value;
+
+
+            var data = {
+                "first": first,
+                "firstBase": firstBase,
+                "second": second,
+                "secondBase": secondBase,
+                "operation": operation
+            };
+
+            fetch('/calculator', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.errors) {
+                    document.getElementById('error').innerText = `Ошибк${data.errors.length > 1 ? 'и' : 'а'}: ` + data.errors.join(',\n');
+                    document.getElementById('result').innerText = '';
+                } else {
+                    document.getElementById('error').innerText = '';
+                    document.getElementById('result').innerText = 'Результат: ' + data.result;
+                }
+            })
+            .catch(error => console.error('Ошибка:', error));
+        }
+    </script>
+</body>
+</html>
