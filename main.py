@@ -23,18 +23,19 @@ def compute():
         second = data['second']
         first_base = data.get('firstBase', '10')
         second_base = data.get('secondBase', '10')
+        result_base = data.get('resultBase', '10')
         operation = data['operation']
     except:
         return response(jsonify({'errors': ['Отсутствуют необходимые параметры']}), 400)
 
-    first, second, errors = validate(
-        first_base, second_base, first, second, operation
+    first, second, result_base, errors = validate(
+        first_base, second_base, result_base, first, second, operation
     )
     if errors:
         return response(jsonify({'errors': errors}), 400)
 
     try:
-        result = calculate(first, second, operation)
+        result = calculate(first, second, operation, result_base)
     except Exception as e:
         return response(jsonify({'errors': [str(e)]}), 400)
 

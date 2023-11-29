@@ -26,7 +26,7 @@ def test_compute_valid_input(client):
     }
     response = client.post('/calculator', json=data)
     assert response.status_code == 200
-    assert response.json['result'] == 30
+    assert response.json['result'] == '30'
 
 
 def test_compute_invalid_first(client):
@@ -119,6 +119,28 @@ def test_compute_invalid_params_amount_operation(client):
     assert response.status_code == 400
     assert 'errors' in response.json
     assert 'Отсутствуют необходимые параметры' in response.json['errors']
+def test_compute_invalid_result_base(client):
+    data = {
+        "first": "20",
+        "second": "11",
+        'operation': '+',
+        'resultBase': 'asdfs',
+    }
+    response = client.post('/calculator', json=data)
+    assert response.status_code == 400
+    assert 'errors' in response.json
+    assert 'Неизвестная СС для результата' in response.json['errors']
+
+def test_compute_valid_result_base(client):
+    data = {
+        "first": "20",
+        "second": "11",
+        'operation': '+',
+        'resultBase': '11',
+    }
+    response = client.post('/calculator', json=data)
+    assert response.status_code == 200
+    assert response.json['result'] == '29'
 
 
 

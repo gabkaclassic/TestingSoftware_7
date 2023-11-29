@@ -29,24 +29,38 @@ def module(a, b):
 def parse(parameter, base=10):
     try:
         return int(parameter, base)
-    except:
-        return False
+    except Exception as e:
+        print(e)
+        raise e
 
 
-def compute(first, second, operation):
+def compute(first, second, operation, result_base=10):
+    result = 0
+
     if operation == '+':
-        return plus(first, second)
+        result = plus(first, second)
     elif operation == '/':
-        return divide(first, second)
+        result = divide(first, second)
     elif operation == '-':
-        return minus(first, second)
+        result = minus(first, second)
     elif operation == '*':
-        return multiply(first, second)
+        result = multiply(first, second)
     elif operation == '%':
-        return module(first, second)
+        result = module(first, second)
     elif operation == '^':
-        return pow(first, second)
+        result = pow(first, second)
 
+    return to_base(result, result_base) or '0'
+
+
+def to_base(digit, base):
+    result = ''
+
+    while digit > 0:
+        result += str(digit % base)
+        digit //= base
+
+    return result[::-1]
 
 
 operations = {

@@ -59,8 +59,15 @@
             <option value="-">Вычитание</option>
             <option value="*">Умножение</option>
             <option value="/">Деление</option>
-            <option value="%">Модуль</option>
+            <option value="%">mod</option>
             <option value="^">Степень</option>
+        </select><br>
+        <label for="resultBase">СС результата:</label>
+        <select id="resultBase" name="resultBase" required>
+            <option value="10">Десятичная</option>
+            <option value="2">Двоичная</option>
+            <option value="8">Восьмеричная</option>
+            <option value="16">Шестнадцатеричная</option>
         </select><br>
 
         <button type="button" onclick="compute()">Вычислить</button>
@@ -77,14 +84,15 @@
             const second = document.getElementById('second').value;
             const secondBase = document.getElementById('secondBase').value;
             const operation = document.getElementById('operation').value;
-
+            const resultBase = document.getElementById('resultBase').value;
 
             var data = {
                 "first": first,
                 "firstBase": firstBase,
                 "second": second,
                 "secondBase": secondBase,
-                "operation": operation
+                "operation": operation,
+                "resultBase": resultBase,
             };
 
             fetch('/calculator', {
