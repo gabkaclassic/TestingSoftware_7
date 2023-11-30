@@ -53,15 +53,47 @@ def compute(first, second, operation, result_base=10):
     return to_base(result, result_base) or '0'
 
 
-def to_base(digit, base):
-    result = ''
+def to_base(number, base):
+    if not isinstance(number, int) and not isinstance(number, float):
+        raise ValueError("Number must be an integer or float.")
+    if not isinstance(base, int) or base < 2 or base > 36:
+        raise ValueError("Base must be an integer between 2 and 36.")
 
-    while digit > 0:
-        result += str(digit % base)
-        digit //= base
+    integer_part = int(abs(number))
+    decimal_part = abs(number) - integer_part
+    integer_result = ""
 
-    return result[::-1]
+    # Перевод целой части числа
+    while integer_part > 0:
+        remainder = integer_part % base
+        if remainder < 10:
+            integer_result = str(remainder) + integer_result
+        else:
+            integer_result = chr(remainder + 55) + integer_result
+        integer_part //= base
 
+    result = integer_result
+
+    # Перевод десятичной части числа (если она есть)
+    if decimal_part > 0:
+        result += "."
+        precision = 15  # Количество знаков после запятой
+        while decimal_part > 0 and precision > 0:
+            decimal_part *= base
+            digit = int(decimal_part)
+            if digit < 10:
+                result += str(digit)
+            else:
+                result += chr(digit + 55)
+            decimal_part -= digit
+            precision -= 1
+
+    if number < 1:
+        result = '0' + result
+    if number < 0:
+        result = "-" + result
+
+    return result
 
 operations = {
     '+': plus,

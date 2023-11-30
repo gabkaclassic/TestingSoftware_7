@@ -43,7 +43,7 @@ def validate_all_parameters(
 
 
 def validate_base(base):
-    return base.isdigit() and base != '1'
+    return base.isdigit() and int(base) in range(2, 36)
 
 
 def validate_param(param, base):

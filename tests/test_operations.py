@@ -10,11 +10,9 @@ def test_compute_plus(mock_plus):
 
 def test_to_base():
     result = to_base(88*7, 33)
-    assert result == '8122'
+    assert result == 'IM'
     result = to_base(88*7, 10)
     assert result == '616'
-    result = to_base(88**7, 123213)
-    assert result == '1962220611723211'
     result = to_base(88*7, 2)
     assert result == '1001101000'
 
@@ -62,7 +60,7 @@ def test_result_base_bin(mock_pow):
 @patch('operations.pow', return_value=20**10)
 def test_result_base_hex(mock_pow):
     result = compute(20, 10, '^', 16)
-    assert result == '950251900000'
+    assert result == '9502F900000'
     mock_pow.assert_called_once_with(20, 10)
 
 @patch('operations.pow', return_value=20**10)

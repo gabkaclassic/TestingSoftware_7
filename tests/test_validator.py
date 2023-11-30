@@ -34,9 +34,9 @@ def test_invalid_first_base():
 def test_invalid_base():
     assert not validate_base('1')
     assert not validate_base('adf')
+    assert not validate_base('334')
 
 def test_valid_base():
-    assert validate_base('112')
     assert validate_base('2')
     assert validate_base('16')
 
